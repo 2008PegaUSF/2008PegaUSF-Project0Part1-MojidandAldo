@@ -7,20 +7,21 @@ public class Customer implements Serializable {
 	
 	/*
 	 */
-	private static String name1;
-	private static String password;
-	private static String name2;
-	private static String username1;
-	private static String username2;
-	private static float balance;
-	protected static int checkAccounts;
-	protected static float[] Accounts = new float[2];
+	private  String name1;
+	private String password;
+	private String name2;
+	public String username1;
+	private String username2;
+	public float balance;
+	protected int checkAccounts;
+	protected float[] Accounts = new float[2];
 	
 	// When customer does not give any information
 	public Customer() {
 		name1 = "User";
 		username1 = "user";
 		password = "password";
+		balance = 0;
 		
 	}
 	
@@ -47,36 +48,27 @@ public class Customer implements Serializable {
 		float newAccount = in.nextFloat();
 		System.out.println("Thank you, pending approval from Bank");
 		checkAccounts++;
-		Accounts[0] = getBalance();
+		Accounts[0] = balance;
 		Accounts[1] = newAccount;
  		
 	}
 	
-	//Getters and Setters for Names, Usernames, and Balance
-	public static String getName1() {
+	public float getBalance() {
+		return balance;
+	}
+	
+	public String getUsername1() {
+		return username1;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public String getName1() {
 		return name1;
 	}
 
-	public static String getName2() {
-		return name2;
-	}
-
-
-	public static String getUsername1() {
-		return username1;
-	}
-
-	public static String getUsername2() {
-		return username2;
-	}
-	
-	public static String getPassword() {
-		return password;
-	}
-
-	public static float getBalance() {
-		return balance;
-	}
 	
 	protected void setBalance(float balance) {
 		this.balance = balance;
@@ -86,32 +78,32 @@ public class Customer implements Serializable {
 	public float deposit(float deposit) {
 		if(deposit < 0) {
 			System.out.println("Cannot withdraw, in deposit mode");
-			return getBalance();
+			return balance;
 		}
-		float newBalance = getBalance() + deposit;
+		float newBalance = balance + deposit;
 		setBalance(newBalance);
-		return getBalance();
+		return balance;
 	}
 	
 	public float withdraw(float withdraw) {
-		if(withdraw > getBalance()) {
+		if(withdraw > balance) {
 			System.out.println("Cannot complete. Overwithdrawn");
-			return getBalance();
+			return balance;
 		}
-		float newBalance = getBalance() - withdraw;
+		float newBalance = balance - withdraw;
 		setBalance(newBalance);
-		return getBalance();
+		return balance;
 	}
 	
 	
 	public float transfer(Customer cTransferTo, float funds) {
-		if(funds > getBalance()) {
+		if(funds > balance) {
 			System.out.println("Cannot transfer more than balance.");
-			return getBalance();
+			return balance;
 		}
 		
 		withdraw(funds);
-		System.out.println("Funds transfered to " + cTransferTo.getName1());
+		System.out.println("Funds transfered to " + cTransferTo.name1);
 		return cTransferTo.deposit(funds);
 	}
 	
@@ -128,6 +120,7 @@ public class Customer implements Serializable {
 		}
 		return name1 + " \nUsername: " + username1 + "\nBalance: $" + balance;
 	}
+
 	
 	
 

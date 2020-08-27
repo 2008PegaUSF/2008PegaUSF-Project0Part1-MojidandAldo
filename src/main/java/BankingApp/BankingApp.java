@@ -19,31 +19,23 @@ public class BankingApp {
 	// the password being the same for both
 	static String Ausername = "auser";
 	static String Eusername = "euser";
-	static String Epassword = "password";
-	static int didLoad = 0;
-	
-	// We are assuming that the Customer List already contains Customers, so they are Loaded with Customers
-	static Customer c1 = new Customer("Sammy123","password","Sam", 1305);
-	static Customer c2 = new Customer("user135", "password","User135", 1946);
-	static Customer c3 = new Customer("lameuser","password","Lame", 1396);
-
-	
-	
-	static ArrayList<Customer> cList = new ArrayList<Customer>();
-
-	
+	static String Epassword = "password";	
 	
 	public static void main(String[] args) {
-		cList.add(c1);
-		cList.add(c2);
-		cList.add(c3);
-		saveData();
-		loadData();
+		ArrayList<Customer> cList = new ArrayList<Customer>();
+		Customer c4 = new Customer("NewUser","password","New",1999);
+		Customer c5 = new Customer("Newish","password","NEWP",1939);
+		cList.add(c4);
+		cList.add(c5);
+		for(Customer c: cList) {
+			System.out.println(c);
+		}
 		/*
 		 *  
 		 *  
 		 *  Storing Customer's info through File Write and Read Methods
-		 */
+			*/	 
+
 		
 		Scanner in = new Scanner(System.in);
 		boolean quit = false;
@@ -61,13 +53,13 @@ public class BankingApp {
 				break;
 			case 1: // Customer Option
 				System.out.println("Customer Login");
-				customerLogin(in);
+				customerLogin(in,cList);
 				break;
 			case 2: // Employee Option
-				employeeLogin(in);
+				employeeLogin(in,cList);
 				break;
 			case 3: // Admin option
-				adminLogin(in);
+				adminLogin(in,cList);
 				break;
 			default:
 				System.out.println("Please choose Customer or Employee or exit app.");
@@ -77,34 +69,35 @@ public class BankingApp {
 			System.out.println("Closing Application");
 			System.out.println("Bye!");
 			in.close();
-			saveData();
+			//saveData(cList);
 	}
+			
 	
-	public static void customerLogin(Scanner in) {
+	public static void customerLogin(Scanner in, ArrayList<Customer> cList) {
 		System.out.println("Please Enter your Username");
 		String user = in.next();
 		for(int i = 0; i < cList.size(); i++) {
-			if(cList.get(i).getUsername1().equals(user)) {
+			if(cList.get(i).getUsername1().contains(user)) {
 				System.out.println("Enter your password");
 				String password = in.next();
-				if(cList.get(i).getPassword().equals(password)) {
-					customerScreen(in,cList.get(i));
+				if(cList.get(i).getPassword().contains(password)) {
+					customerScreen(in,cList.get(i), cList);
 					break;
 					
 				} else {
 					System.out.println("Incorrect Password");
-					customerLogin(in);
+					break;
 				}
 			} else {
 				System.out.println("Not in Username");
-				customerLogin(in);
+				break;
 
 			}
 		}
 	
 	}
 	
-	public static void customerScreen(Scanner in, Customer c) {
+	public static void customerScreen(Scanner in, Customer c, ArrayList<Customer> cList) {
 		System.out.println("Welcome to the Customer Screen");
 		System.out.println("Here is your information");
 		System.out.println(c.toString());
@@ -137,7 +130,7 @@ public class BankingApp {
 				System.out.println("Enter Username of that other Customer");
 				String tUser = (String) in.next();
 				for(int i = 0; i < cList.size(); i++) {
-					if(cList.get(i).getName1().equals(tUser)) {
+					if(cList.get(i).getName1().contains(tUser)) {
 						System.out.println("How much funds?");
 						float transfer = in.nextFloat();
 						c.transfer(cList.get(i), transfer);						
@@ -157,7 +150,7 @@ public class BankingApp {
 		} while(quit == false);
 	}
 
-	public static void employeeLogin(Scanner in) {
+	public static void employeeLogin(Scanner in ,ArrayList<Customer> cList) {
 		System.out.println("***Employee Login***");
 		System.out.println("Please Enter your Username");
 		String employee = in.next();
@@ -165,19 +158,17 @@ public class BankingApp {
 			System.out.println("Enter your password");
 			String password = in.next();
 			if(password.equals(Epassword)) {
-				employeeScreen(in);
+				employeeScreen(in,cList);
 				
 			} else {
-				System.out.println("Incorrect password");
-				employeeLogin(in);
+				System.out.println("Incorrect password");			
 			}
 		} else {
 			System.out.println("Not in Username");
-			employeeLogin(in);
 		}
 	}
 	
-	public static void employeeScreen(Scanner in) {
+	public static void employeeScreen(Scanner in, ArrayList<Customer> cList) {
 		System.out.println("Welcome to the Employee Screen");
 		Employee e = new Employee();
 		boolean quit = false;
@@ -196,7 +187,7 @@ public class BankingApp {
 				System.out.println("Enter Username");
 				String user1 = (String) in.next();
 				for(int i = 0; i < cList.size(); i++) {
-					if(cList.get(i).getName1().equals(user1)) {
+					if(cList.get(i).getName1().contains(user1)) {
 						System.out.println(cList.get(i).toString());
 						break;
 					} else {
@@ -210,7 +201,7 @@ public class BankingApp {
 				System.out.println("Username");
 				String user2 = (String) in.next();
 				for(int i = 0; i < cList.size(); i++) {
-					if(cList.get(i).getName1().equals(user2)) {
+					if(cList.get(i).getName1().contains(user2)) {
 						if(cList.get(i).pendingAccounts() > 0) {
 							e.Decision(cList.get(i), in);
 							break;
@@ -228,7 +219,7 @@ public class BankingApp {
 		} while(!quit);
 	}
 
-	public static void adminLogin(Scanner in) {
+	public static void adminLogin(Scanner in, ArrayList<Customer> cList) {
 		System.out.println("***Admin Login***");
 		System.out.println("Please Enter your Username");
 		String admin = in.next();
@@ -236,18 +227,16 @@ public class BankingApp {
 			System.out.println("Enter your password");
 			String password = in.next();
 			if(password.equals(Epassword)) {
-				adminScreen(in);
+				adminScreen(in,cList);
 			} else {
 				System.out.println("Incorrect password");
-				adminLogin(in);
 			}
 		} else {
 			System.out.println("Not in Username");
-			adminLogin(in);
 		}
 	}
 	
-	public static void adminScreen(Scanner in) {
+	public static void adminScreen(Scanner in, ArrayList<Customer> cList) {
 		BankAdmin a = new BankAdmin();
 		System.out.println("Welcome to the Admin Screen");
 		boolean quit = false;
@@ -283,7 +272,7 @@ public class BankingApp {
 				String editUser = (String) in.next();
 				for(int i = 0; i < cList.size(); i++) {
 					if(cList.get(i).getName1().equals(editUser)) {
-						customerScreen(in,cList.get(i));
+						customerScreen(in,cList.get(i),cList);
 					}
 				}
 				break;
@@ -308,6 +297,7 @@ public class BankingApp {
 							a.Decision(cList.get(i), in);
 						} else {
 							System.out.println("No Pending Accounts");
+							break;
 						}
 					}
 				}
@@ -318,7 +308,7 @@ public class BankingApp {
 		} while(!quit);
 	}
 	
-	public static void saveData() {	
+	public static void saveData(ArrayList<Customer> cList) {	
 
 		try {
 			FileOutputStream fileOut = new FileOutputStream("CustomerData.txt");
