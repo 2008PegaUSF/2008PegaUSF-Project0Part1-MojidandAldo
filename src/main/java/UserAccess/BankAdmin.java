@@ -26,7 +26,7 @@ public class BankAdmin {
 		c += "Customer's name: " + customer.getName1() + "\n";
 		c += "Projected Balance in Account: " + customer.Accounts[1] + "\n";
 		
-
+		boolean approved = false;
 		boolean quit = false;
 		
 		do {
@@ -37,16 +37,18 @@ public class BankAdmin {
 			switch(decision) {
 			case 1:
 				System.out.println("Account Approved!");
-				return true;
+				 approved = true;
+				return approved;
 			case 2: 
 				System.out.println("Account Denied.");
-				return false;
+				approved = false;
+				return approved;
 				
 			default:
 				System.out.println("Please select to approve or deny the customer");
 			}
 		} while (!quit);
-		return false;
+		return approved;
 	}
 	
 	

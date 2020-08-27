@@ -23,20 +23,22 @@ public class BankingApp {
 	static int didLoad = 0;
 	
 	// We are assuming that the Customer List already contains Customers, so they are Loaded with Customers
+	static Customer c1 = new Customer("Sammy123","password","Sam", 1305);
+	static Customer c2 = new Customer("user135", "password","User135", 1946);
+	static Customer c3 = new Customer("lameuser","password","Lame", 1396);
+
+	
+	
 	static ArrayList<Customer> cList = new ArrayList<Customer>();
 
 	
 	
 	public static void main(String[] args) {
-
-		Customer c1 = new Customer("Sammy123","password","Sam", 1305);
-		Customer c2 = new Customer("user135", "password","User135", 1946);
-		Customer c3 = new Customer("lameuser","password","Lame", 1396);
 		cList.add(c1);
 		cList.add(c2);
 		cList.add(c3);
-			saveData();
-			loadData();
+		saveData();
+		loadData();
 		/*
 		 *  
 		 *  
@@ -87,6 +89,7 @@ public class BankingApp {
 				String password = in.next();
 				if(cList.get(i).getPassword().equals(password)) {
 					customerScreen(in,cList.get(i));
+					break;
 					
 				} else {
 					System.out.println("Incorrect Password");
@@ -148,6 +151,8 @@ public class BankingApp {
 				System.out.println("NEW ACCOUNT APPLICATION");
 				c.addAccount(in);
 				break;
+			default:
+				System.out.println("Please Select one of the Options Please");
 			}
 		} while(quit == false);
 	}
@@ -161,6 +166,7 @@ public class BankingApp {
 			String password = in.next();
 			if(password.equals(Epassword)) {
 				employeeScreen(in);
+				
 			} else {
 				System.out.println("Incorrect password");
 				employeeLogin(in);
@@ -191,10 +197,11 @@ public class BankingApp {
 				String user1 = (String) in.next();
 				for(int i = 0; i < cList.size(); i++) {
 					if(cList.get(i).getName1().equals(user1)) {
-						System.out.println(e.getCustomerInfo(cList.get(i)));
+						System.out.println(cList.get(i).toString());
 						break;
 					} else {
 						System.out.println("User not found");
+						break;
 					}
 				}
 				break;
@@ -206,11 +213,16 @@ public class BankingApp {
 					if(cList.get(i).getName1().equals(user2)) {
 						if(cList.get(i).pendingAccounts() > 0) {
 							e.Decision(cList.get(i), in);
+							break;
 						} else {
 							System.out.println("No Pending Accounts");
+							break;
 						}
 					}
 				}
+				break;
+			default:
+				System.out.println("Please Select one of the Options");
 				break;
 			}
 		} while(!quit);
@@ -257,7 +269,7 @@ public class BankingApp {
 				String user1 = (String) in.next();
 				for(int i = 0; i < cList.size(); i++) {
 					if(cList.get(i).getName1().equals(user1)) {
-						System.out.println(a.getCustomerInfo(cList.get(i)));
+						System.out.println(cList.get(i).toString());
 						break;
 					} else {
 						System.out.println("User not found");
@@ -300,11 +312,14 @@ public class BankingApp {
 					}
 				}
 				break;
+			default:
+				System.out.println("Please Select One of the Options");
 			}
 		} while(!quit);
 	}
 	
 	public static void saveData() {	
+
 		try {
 			FileOutputStream fileOut = new FileOutputStream("CustomerData.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);

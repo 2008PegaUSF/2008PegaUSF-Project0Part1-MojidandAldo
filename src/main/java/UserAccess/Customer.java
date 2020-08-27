@@ -46,7 +46,7 @@ public class Customer implements Serializable {
 		System.out.println("How much funds do you want to add to this account?");
 		float newAccount = in.nextFloat();
 		System.out.println("Thank you, pending approval from Bank");
-		checkAccounts = 1;
+		checkAccounts++;
 		Accounts[0] = getBalance();
 		Accounts[1] = newAccount;
  		
@@ -124,9 +124,9 @@ public class Customer implements Serializable {
 	public String toString() {
 		if(username2 != null) {
 			return name1 + " \nUsername: " + username1 + "\n" + name2 + " \nUsername: "
-					+ username2 + "Balance: $" + balance;
+					+ username2 + "\nBalance: $" + balance;
 		}
-		return name1 + " \nUsername: " + username1 + "Balance: $" + balance;
+		return name1 + " \nUsername: " + username1 + "\nBalance: $" + balance;
 	}
 	
 	

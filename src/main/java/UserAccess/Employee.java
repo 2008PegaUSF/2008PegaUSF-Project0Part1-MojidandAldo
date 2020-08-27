@@ -2,8 +2,9 @@ package UserAccess;
 
 import java.util.Scanner;
 
-public class Employee {
-	
+public class Employee extends Customer {
+
+
 	// If User is already a customer, the employee pulls up their information
 	public String getCustomerInfo(Customer customer) {
 		String c = null;
@@ -22,8 +23,8 @@ public class Employee {
 	// Returning true will be approving the account, and false will be denying it
 	public boolean Decision(Customer customer, Scanner in) {
 		String c = null;
-		c += "Customer's name: " + customer.getName1() + "\n";
-		c += "Projected Balance in Account: " + customer.Accounts[1] + "\n";
+		c += "Customer's name: " + customer.getUsername1() + "\n";
+		c += "Projected Balance in Account: " + customer.getBalance() + "\n";
 		
 
 		boolean quit = false;
@@ -36,6 +37,7 @@ public class Employee {
 			switch(decision) {
 			case 1:
 				System.out.println("Account Approved!");
+				// Move Customer into ArrayList of actual Customers
 				return true;
 			case 2: 
 				System.out.println("Account Denied.");
@@ -47,7 +49,5 @@ public class Employee {
 		} while (!quit);
 		return false;
 	}
-	
-	
 	
 }
