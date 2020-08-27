@@ -20,6 +20,7 @@ public class BankingApp {
 	static String Ausername = "auser";
 	static String Eusername = "euser";
 	static String Epassword = "password";
+	static int didLoad = 0;
 	
 	// We are assuming that the Customer List already contains Customers, so they are Loaded with Customers
 	static ArrayList<Customer> cList = new ArrayList<Customer>();
@@ -28,7 +29,14 @@ public class BankingApp {
 	
 	public static void main(String[] args) {
 
-
+		Customer c1 = new Customer("Sammy123","password","Sam", 1305);
+		Customer c2 = new Customer("user135", "password","User135", 1946);
+		Customer c3 = new Customer("lameuser","password","Lame", 1396);
+		cList.add(c1);
+		cList.add(c2);
+		cList.add(c3);
+			saveData();
+			loadData();
 		/*
 		 *  
 		 *  
@@ -67,6 +75,7 @@ public class BankingApp {
 			System.out.println("Closing Application");
 			System.out.println("Bye!");
 			in.close();
+			saveData();
 	}
 	
 	public static void customerLogin(Scanner in) {
@@ -139,9 +148,8 @@ public class BankingApp {
 				System.out.println("NEW ACCOUNT APPLICATION");
 				c.addAccount(in);
 				break;
-			
 			}
-		} while(!quit);
+		} while(quit == false);
 	}
 
 	public static void employeeLogin(Scanner in) {
