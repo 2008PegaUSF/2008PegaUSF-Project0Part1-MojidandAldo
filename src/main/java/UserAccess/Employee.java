@@ -23,7 +23,7 @@ public class Employee {
 	public boolean Decision(Customer customer, Scanner in) {
 		String c = null;
 		c += "Customer's name: " + customer.getName1() + "\n";
-		c += "Projected Balance in Account: " + customer.getBalance() + "\n";
+		c += "Projected Balance in Account: " + customer.Accounts[1] + "\n";
 		
 
 		boolean quit = false;
@@ -36,7 +36,6 @@ public class Employee {
 			switch(decision) {
 			case 1:
 				System.out.println("Account Approved!");
-				// Move Customer into ArrayList of actual Customers
 				return true;
 			case 2: 
 				System.out.println("Account Denied.");
@@ -48,5 +47,7 @@ public class Employee {
 		} while (!quit);
 		return false;
 	}
+	
+	
 	
 }

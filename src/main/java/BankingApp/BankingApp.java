@@ -1,8 +1,14 @@
 package BankingApp;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import UserAccess.BankAdmin;
 import UserAccess.Customer;
 import UserAccess.CustomerList;
 import UserAccess.Employee;
@@ -83,10 +89,7 @@ public class BankingApp {
 
 			}
 		}
-			
-					
-
-
+	
 	}
 	
 	public static void customerScreen(Scanner in, Customer c) {
@@ -97,7 +100,7 @@ public class BankingApp {
 		do{
 			System.out.println("What would you like to do today?");
 			
-			System.out.println("(1) Deposit\n(2) Withdraw\n(3) Transfer\n (0) To Log Out");
+			System.out.println("(1) Deposit\n(2) Withdraw\n(3) Transfer\n(4) Apply for a New Account\n(0) To Log Out");
 			int decision = in.nextInt();
 			switch(decision) {
 			case 0: 
@@ -132,7 +135,10 @@ public class BankingApp {
 					}
 					break;
 				}
-
+			case 4 : // Apply for a new Account;
+				System.out.println("NEW ACCOUNT APPLICATION");
+				c.addAccount(in);
+				break;
 			
 			}
 		} while(!quit);
@@ -164,7 +170,7 @@ public class BankingApp {
 		do{
 			System.out.println("What would you like to do today?");
 			
-			System.out.println("(1)View a Customer's Account \n(2)Approve or Deny a Customer's Account \n(0) To Log Out");
+			System.out.println("(1) View a Customer's Account \n(2) Approve or Deny a Customer's Account \n(0) To Log Out");
 			int decision = in.nextInt();
 			switch(decision) {
 			case 0: 
@@ -173,15 +179,30 @@ public class BankingApp {
 				break;
 			case 1:
 				System.out.println("Which account would you like to view?");
-				System.out.println("Username");
-				// Searches username in Array List
-				// goes into C.toString
+				System.out.println("Enter Username");
+				String user1 = (String) in.next();
+				for(int i = 0; i < cList.size(); i++) {
+					if(cList.get(i).getName1().equals(user1)) {
+						System.out.println(e.getCustomerInfo(cList.get(i)));
+						break;
+					} else {
+						System.out.println("User not found");
+					}
+				}
 				break;
 			case 2:
 				System.out.println("Which pending account would you like to view?");
 				System.out.println("Username");
-				// Searches username in ArrayList
-				// Checks if there are any pending accounts
+				String user2 = (String) in.next();
+				for(int i = 0; i < cList.size(); i++) {
+					if(cList.get(i).getName1().equals(user2)) {
+						if(cList.get(i).pendingAccounts() > 0) {
+							e.Decision(cList.get(i), in);
+						} else {
+							System.out.println("No Pending Accounts");
+						}
+					}
+				}
 				break;
 			}
 		} while(!quit);
@@ -207,6 +228,7 @@ public class BankingApp {
 	}
 	
 	public static void adminScreen(Scanner in) {
+		BankAdmin a = new BankAdmin();
 		System.out.println("Welcome to the Admin Screen");
 		boolean quit = false;
 		do{
@@ -223,31 +245,86 @@ public class BankingApp {
 				break;
 			case 1:
 				System.out.println("Which account would you like to view?");
-				System.out.println("Username");
-				// Searches username in Array List
-				// goes into C.toString
+				System.out.println("Enter Username");
+				String user1 = (String) in.next();
+				for(int i = 0; i < cList.size(); i++) {
+					if(cList.get(i).getName1().equals(user1)) {
+						System.out.println(a.getCustomerInfo(cList.get(i)));
+						break;
+					} else {
+						System.out.println("User not found");
+					}
+				}
 				break;
+				
 			case 2:
 				System.out.println("Which account would you like to edit?");
 				System.out.println("Username");
-				// Searches username in Array List
-				// goes into C.toString
+				String editUser = (String) in.next();
+				for(int i = 0; i < cList.size(); i++) {
+					if(cList.get(i).getName1().equals(editUser)) {
+						customerScreen(in,cList.get(i));
+					}
+				}
 				break;
 			case 3:
 				System.out.println("Which account would you like to cancel?");
 				System.out.println("Username");
 				String user = in.next();
+				for(int i = 0; i < cList.size(); i++) {
+					if(cList.get(i).getName1().equals(user)) {
+						a.cancel(cList, cList.get(i));
+					}
+				}
 				System.out.println("Cancelling Account");
-				// ArrayList removes this specific customer.
 				break;
 			case 4:
 				System.out.println("Which pending account would you like to view?");
 				System.out.println("Username");
-				// Searches username in ArrayList
-				// Checks if there are any pending accounts
+				String user2 = (String) in.next();
+				for(int i = 0; i < cList.size(); i++) {
+					if(cList.get(i).getName1().equals(user2)) {
+						if(cList.get(i).pendingAccounts() > 0) {
+							a.Decision(cList.get(i), in);
+						} else {
+							System.out.println("No Pending Accounts");
+						}
+					}
+				}
 				break;
 			}
 		} while(!quit);
+	}
+	
+	public static void saveData() {	
+		try {
+			FileOutputStream fileOut = new FileOutputStream("CustomerData.txt");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(cList);
+			out.close();
+			fileOut.close();
+			System.out.println("Serialized data");
+			
+	
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void loadData() {
+		ArrayList<Customer> deserialized = new ArrayList<Customer>();
+		try {
+			FileInputStream fileIn = new FileInputStream("CustomerData.txt");
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			deserialized = (ArrayList<Customer>) in.readObject();
+			in.close();
+			fileIn.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		} catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

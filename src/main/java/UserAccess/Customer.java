@@ -1,6 +1,7 @@
 package UserAccess;
 
 import java.io.Serializable;
+import java.util.Scanner;
 
 public class Customer implements Serializable {
 	
@@ -12,6 +13,8 @@ public class Customer implements Serializable {
 	private static String username1;
 	private static String username2;
 	private static float balance;
+	protected static int checkAccounts;
+	protected static float[] Accounts = new float[2];
 	
 	// When customer does not give any information
 	public Customer() {
@@ -37,6 +40,16 @@ public class Customer implements Serializable {
 		this.name1 = name1;
 		this.name2 = name2;
 		this.balance = balance;
+	}
+	
+	public void addAccount(Scanner in) {
+		System.out.println("How much funds do you want to add to this account?");
+		float newAccount = in.nextFloat();
+		System.out.println("Thank you, pending approval from Bank");
+		checkAccounts = 1;
+		Accounts[0] = getBalance();
+		Accounts[1] = newAccount;
+ 		
 	}
 	
 	//Getters and Setters for Names, Usernames, and Balance
@@ -65,7 +78,7 @@ public class Customer implements Serializable {
 		return balance;
 	}
 	
-	private void setBalance(float balance) {
+	protected void setBalance(float balance) {
 		this.balance = balance;
 	}
 	
@@ -100,6 +113,11 @@ public class Customer implements Serializable {
 		withdraw(funds);
 		System.out.println("Funds transfered to " + cTransferTo.getName1());
 		return cTransferTo.deposit(funds);
+	}
+	
+	// Pending Accounts
+	public int pendingAccounts() {
+		return checkAccounts;
 	}
 
 	@Override
